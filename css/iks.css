@@ -1,0 +1,32 @@
+body{
+            color: #00C2FF;
+            background-color:#000;
+            min-width:1000px;
+        }
+
+        .node circle {
+          fill: #fff;
+          stroke: steelblue;
+          stroke-width: 1.5px;
+        }
+        
+        .node {
+          font: 10px sans-serif;
+        }
+        .node text{
+            fill:#00C2FF;
+            font-weight: bold;
+        }
+        .svg{    
+        }
+        
+        .link {
+          fill: none;
+          stroke: #00C2FF;
+          stroke-width: 1.5px;
+        }
+        path.link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
+        }
