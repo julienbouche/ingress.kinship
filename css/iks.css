@@ -12,6 +12,7 @@ body{
         
         .node {
           font: 10px sans-serif;
+          cursor:pointer;
         }
         .node text{
             fill:#00C2FF;
