@@ -274,7 +274,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
               
                 nodeUpdate.select("circle")
                     .attr("r", 4.5)
-                    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+                    .style("fill", function(d) { return d._children ? "#00C2FF" : "#fff"; });
               
                 nodeUpdate.select("text")
                     .style("fill-opacity", 1)
