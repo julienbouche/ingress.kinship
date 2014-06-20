@@ -91,6 +91,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
         <script type="text/javascript" src="js/d3-3.4.8/d3.min.js"></script>
         <script type="text/javascript" src="js/iks.js"></script>
         <script type="text/javascript" src="js/d3_kinship.js"></script>
+        <link rel="icon" type="image/png" href="images/resistant.png" />
     </head>
     <body>
         <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" style="float:left;width:40%">
