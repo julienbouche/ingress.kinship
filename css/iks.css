@@ -9,13 +9,15 @@ body{
 .header{           
 }
 .footer{
+            position:fixed;
             color:white;
             font-size: x-small ;
-            display: inline-block;
+            display: block;
             margin:auto;
             width:100%;
             bottom:0px;
             text-align: center;
+            z-index:100;
 }
 
 .header>span{
