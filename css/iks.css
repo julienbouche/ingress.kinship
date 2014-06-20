@@ -2,32 +2,41 @@ body{
             color: #00C2FF;
             background-color:#000;
             min-width:1000px;
-        }
+}
 
-        .node circle {
-          fill: #fff;
-          stroke: steelblue;
-          stroke-width: 1.5px;
-        }
-        
-        .node {
-          font: 10px sans-serif;
-          cursor:pointer;
-        }
-        .node text{
+.header{           
+}
+
+
+.header>span{
+            font-variant: small-caps;
+            font-weight: bold;
+}
+
+.node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+}
+
+.node {
+            font: 10px sans-serif;
+            cursor:pointer;
+}
+.node text{
             fill:#00C2FF;
             font-weight: bold;
-        }
-        .svg{    
-        }
-        
-        .link {
-          fill: none;
-          stroke: #555;
-          stroke-width: 1.5px;
-        }
-        path.link {
+}
+.svg{
+}
+
+.link {
             fill: none;
             stroke: #555;
             stroke-width: 1.5px;
-        }
+}
+path.link {
+            fill: none;
+            stroke: #555;
+            stroke-width: 1.5px;
+}

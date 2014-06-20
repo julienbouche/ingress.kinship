@@ -106,35 +106,40 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
         <link rel="icon" type="image/png" href="images/resistant.png" />
     </head>
     <body>
-        <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" style="float:left;width:40%">
-            <fieldset>
-                <legend>Ajouter/Modifier un joueur</legend>
-                <input type="text" placeholder="@username" name="username"/> initié par <input type="text" placeholder="@username" name="parentusername"/>
-                <input type="submit" value="Ajouter" />
-            </fieldset>
-        </form>
-        
-        <form style="float:left; width:40%" onsubmit="searchPlayer();return false;">
-            <fieldset>
-                <legend>Rechercher un joueur</legend>
-                <input type="text" name="searchname" placeholder="@playername" />
-                <input type="submit" value="Rechercher" onclick="searchPlayer();"/>
-                <input type="button" value="Afficher tous" onclick="showAll(root);update(root);" />
-                <input type="button" value="Cacher tous" onclick="hideAll(root);update(root);" />
+        <div class="header">
+            <span style="display: inline-block;margin:auto;text-align: center;width:100%">Ingress Master-Padawan Relationship</span>
+            <div>
+                <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" style="float:left;width:40%">
+                    <fieldset>
+                        <legend>Ajouter/Modifier un joueur</legend>
+                        <input type="text" placeholder="@username" name="username"/> initié par <input type="text" placeholder="@username" name="parentusername"/>
+                        <input type="submit" value="Ajouter" />
+                    </fieldset>
+                </form>
                 
-            </fieldset>            
-        </form>
-        <form style="float:left; width:20%">
-            <fieldset>
-                <legend>Options graphiques</legend>
-                Mode:
-                <select name="graphmode" id="graphmode" onchange="update_mode(this);">
-                    <option value="linear">Lineaire</option>
-                    <option value="radial">Radial</option>
-                </select>
-                
-            </fieldset>            
-        </form>
+                <form style="float:left; width:40%" onsubmit="searchPlayer();return false;">
+                    <fieldset>
+                        <legend>Rechercher un joueur</legend>
+                        <input type="text" name="searchname" placeholder="@playername" />
+                        <input type="submit" value="Rechercher" onclick="searchPlayer();"/>
+                        <input type="button" value="Afficher tous" onclick="showAll(root);update(root);" />
+                        <input type="button" value="Cacher tous" onclick="hideAll(root);update(root);" />
+                        
+                    </fieldset>            
+                </form>
+                <form style="float:left; width:20%">
+                    <fieldset>
+                        <legend>Options graphiques</legend>
+                        Mode:
+                        <select name="graphmode" id="graphmode" onchange="update_mode(this);">
+                            <option value="linear">Lineaire</option>
+                            <option value="radial">Radial</option>
+                        </select>
+                        
+                    </fieldset>            
+                </form>
+            </div>
+        </div>
         <script>
             //variables globales
             var m = [20, 20, 20, 20],
@@ -441,6 +446,6 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             //on démarre l'initialisation du graph
             init_tree();
     </script>
-        
+    
     </body>
 </html>
