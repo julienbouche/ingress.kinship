@@ -254,7 +254,6 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 // Enter any new nodes at the parent's previous position.
                 var nodeEnter = node.enter().append("g")
                     .attr("class", "node")
-                    //.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
                     .on("click", function(d){toggle(d);update(d);});
               
                 nodeEnter.append("circle")
@@ -265,7 +264,6 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     .attr("x", 10)
                     .attr("dy", ".35em")
                     .attr("text-anchor", "start")
-                    //.attr("transform", function(d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (d.name.length * 8.5)  + ")"; })
                     .text(function(d) { return d.name; })
                     .style("fill-opacity", 1e-6);
               
@@ -280,12 +278,25 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
               
                 nodeUpdate.select("text")
                     .style("fill-opacity", 1)
-                    .attr("transform", function(d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (d.name.length + 50)  + ")"; });
+                    .attr("transform", function(d) {
+                        if (d.x<180) {
+                            if (d.children) 
+                                return d.x>90? "rotate(-20)" : "rotate(20)";
+                            else
+                                return "translate(0)";
+                        }
+                        else{
+                            if (d.children) 
+                                return d.x > 270? "rotate(160)translate(-" + (d.name.length + 60)  + ")": "rotate(200)translate(-" + (d.name.length + 60)  + ")";
+                            else
+                                return "rotate(180)translate(-" + (d.name.length + 60)  + ")";
+                        }
+                        
+                    });
               
                 //transform
                 var nodeExit = node.exit().transition()
                     .duration(duration)
-                    //.attr("transform", function(d) { return "diagonal(" + source.y + "," + source.x + ")"; })
                     .remove();
               
                 nodeExit.select("circle")
