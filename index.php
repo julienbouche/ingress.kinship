@@ -104,6 +104,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
         <script type="text/javascript" src="js/iks.js"></script>
         <script type="text/javascript" src="js/d3_kinship.js"></script>
         <link rel="icon" type="image/png" href="images/resistant.png" />
+        <link rel="stylesheet" type="text/css" href="css/github_ribbon.css" media="screen" />
     </head>
     <body>
         <div class="header">
@@ -446,6 +447,11 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             //on démarre l'initialisation du graph
             init_tree();
     </script>
+    <div class="github-fork-ribbon-wrapper right-bottom">
+        <div class="github-fork-ribbon">
+            <a href="https://github.com/julienbouche/ingress.kinship" target="_blank">Fork Me</a>
+        </div>
+    </div>
     <div class="footer">Ce site n'est pas affilié à Niantic Labs ou Google.</div>
     </body>
 </html>
