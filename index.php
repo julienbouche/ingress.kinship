@@ -279,17 +279,11 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 nodeUpdate.select("text")
                     .style("fill-opacity", 1)
                     .attr("transform", function(d) {
-                        if (d.x<180) {
-                            if (d.children) 
-                                return d.x>90? "rotate(-20)" : "rotate(20)";
-                            else
-                                return "translate(0)";
-                        }
+                        
+                        if (d.x<180)
+                            return "rotate("+(90-d.x)+")";
                         else{
-                            if (d.children) 
-                                return d.x > 270? "rotate(160)translate(-" + (d.name.length + 60)  + ")": "rotate(200)translate(-" + (d.name.length + 60)  + ")";
-                            else
-                                return "rotate(180)translate(-" + (d.name.length + 60)  + ")";
+                            return "rotate("+(90-d.x)+")translate(-" + (d.name.length + 60)  + ")";
                         }
                         
                     });
