@@ -112,8 +112,31 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 
             </fieldset>            
         </form>
-        
+        <form style="float:left; width:20%">
+            <fieldset>
+                <legend>Options graphiques</legend>
+                Mode:
+                <select name="graphmode" id="graphmode" onchange="update_mode(this);">
+                    <option value="linear">Lineaire</option>
+                    <option value="radial">Radial</option>
+                </select>
+                
+            </fieldset>            
+        </form>
         <script>
+            //variables globales
+            var m = [20, 20, 20, 20],
+                w = maximum(window.innerWidth - m[1] - m[3], 1000),
+                h = window.innerHeight - m[0] - m[2],
+                i = 0,
+                duration = 350,
+                diameter = 500,
+                mult_x=1.5, mult_y=1,
+                root, tree, vis, diagonal, svg, zoom,
+                graph_mode;
+                
+                
+                
             function maximum(a, b) {
                 return a<b? b: a;
             }
@@ -121,52 +144,188 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             function zoomed() {
                 vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
             }
+            
+            function update_mode(elt){
+                graph_mode = elt.value;
+                d3.select("body").select("svg").remove();
+                init_tree();
+                update(root);
+            }
                 
-            var m = [20, 20, 20, 20],
-                w = maximum(window.innerWidth - m[1] - m[3], 1000),
-                h = window.innerHeight - m[0] - m[2],
-                i = 0,
-                mult_x=1.5, mult_y=1,
-                root;
             
+            function init_tree(){
+                graph_mode = document.getElementById("graphmode").value;
+                zoom = d3.behavior.zoom()
+                    .scaleExtent([0.5, 10])
+                    .on("zoom", zoomed);
+                    
+                if (graph_mode=='linear') {
+                    init_tree_linear();
+                }
+                else init_tree_radial();
+            }
             
-            var tree = d3.layout.tree()
+            function init_tree_linear(){
+                tree = d3.layout.tree()
                 .size([h, w]);
+                
+                diagonal = d3.svg.diagonal()
+                    .projection(function(d) { return [d.x*mult_x, d.y]; });
+                
+                vis = d3.select("body").append("svg:svg")
+                    .attr("width", w + m[1] + m[3])
+                    .attr("height", h + m[0] + m[2])
+                    .append("svg:g")
+                    .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
+                    .call(zoom);
+                
+                
+                //ajout pour trapper les évènements correctement
+                var rect = vis.append("rect")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .style("fill", "none")
+                    .style("pointer-events", "all");
+                
+                //lecture des données
+                d3.json("json_kinship.php", function(json) {
+                  root = json;
+                  root.x0 = h / 2;
+                  root.y0 = 0;
+                
+                  update_linear(root);
+                });
+            }
             
-            var zoom = d3.behavior.zoom()
-                .scaleExtent([0.5, 10])
-                .on("zoom", zoomed);
-            
-            var diagonal = d3.svg.diagonal()
-                .projection(function(d) { return [d.x*mult_x, d.y]; });
-            
-            var vis = d3.select("body").append("svg:svg")
-                .attr("width", w + m[1] + m[3])
-                .attr("height", h + m[0] + m[2])
-                .append("svg:g")
-                .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
-                .call(zoom);
-            
-            //ajout pour trapper les évènements correctement
-            var rect = vis.append("rect")
-                .attr("width", w)
-                .attr("height", h)
-                .style("fill", "none")
-                .style("pointer-events", "all");
-            
-            
-            //lecture des données
-            d3.json("json_kinship.php", function(json) {
-              root = json;
-              root.x0 = h / 2;
-              root.y0 = 0;
-            
-              update(root);
-            });
-            
+            function init_tree_radial(){
+                tree = d3.layout.tree()
+                    .size([360, diameter / 2 - 120])
+                    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+    
+                diagonal = d3.svg.diagonal.radial()
+                    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+                
+                svg = d3.select("body").append("svg")
+                    .attr("width", diameter)
+                    .attr("height", diameter - 150)
+                  .append("g")
+                    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")")
+                    .call(zoom);
+                
+                //ajout pour trapper les évènements correctement
+                var rect = svg.append("rect")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .style("fill", "none")
+                    .style("pointer-events", "all");
+                
+                d3.json("json_kinship.php", function(error, json) {
+                    root = json;
+                    var nodes = tree.nodes(root);
+                      
+                    update_radial(root);
+                });
+            }
             
             //fonction permettant de mettre à jour l'affichage de l'arbre
-            function update(source) {
+            function update(source){
+                //TODO switch between update modes
+                if (graph_mode=='linear') {
+                    update_linear(source);
+                }
+                else update_radial(source);
+            }
+            
+            function update_radial(source) {
+                // Compute the new tree layout.
+                var nodes = tree.nodes(root),
+                    links = tree.links(nodes);
+              
+                // Normalize for fixed-depth.
+                nodes.forEach(function(d) { d.y = d.depth * 80; });
+              
+                // Update the nodes…
+                var node = svg.selectAll("g.node")
+                    .data(nodes, function(d) { return d.id || (d.id = ++i); });
+              
+                // Enter any new nodes at the parent's previous position.
+                var nodeEnter = node.enter().append("g")
+                    .attr("class", "node")
+                    //.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+                    .on("click", function(d){toggle(d);update(d);});
+              
+                nodeEnter.append("circle")
+                    .attr("r", 1e-6)
+                    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+              
+                nodeEnter.append("text")
+                    .attr("x", 10)
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "start")
+                    //.attr("transform", function(d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (d.name.length * 8.5)  + ")"; })
+                    .text(function(d) { return d.name; })
+                    .style("fill-opacity", 1e-6);
+              
+                // Transition nodes to their new position.
+                var nodeUpdate = node.transition()
+                    .duration(duration)
+                    .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+              
+                nodeUpdate.select("circle")
+                    .attr("r", 4.5)
+                    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+              
+                nodeUpdate.select("text")
+                    .style("fill-opacity", 1)
+                    .attr("transform", function(d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (d.name.length + 50)  + ")"; });
+              
+                // TODO: appropriate transform
+                var nodeExit = node.exit().transition()
+                    .duration(duration)
+                    //.attr("transform", function(d) { return "diagonal(" + source.y + "," + source.x + ")"; })
+                    .remove();
+              
+                nodeExit.select("circle")
+                    .attr("r", 1e-6);
+              
+                nodeExit.select("text")
+                    .style("fill-opacity", 1e-6);
+              
+                // Update the links…
+                var link = svg.selectAll("path.link")
+                    .data(links, function(d) { return d.target.id; });
+              
+                // Enter any new links at the parent's previous position.
+                link.enter().insert("path", "g")
+                    .attr("class", "link")
+                    .attr("d", function(d) {
+                      var o = {x: source.x0, y: source.y0};
+                      return diagonal({source: o, target: o});
+                    });
+              
+                // Transition links to their new position.
+                link.transition()
+                    .duration(duration)
+                    .attr("d", diagonal);
+              
+                // Transition exiting nodes to the parent's new position.
+                link.exit().transition()
+                    .duration(duration)
+                    .attr("d", function(d) {
+                      var o = {x: source.x, y: source.y};
+                      return diagonal({source: o, target: o});
+                    })
+                    .remove();
+              
+                // Stash the old positions for transition.
+                nodes.forEach(function(d) {
+                  d.x0 = d.x;
+                  d.y0 = d.y;
+                });
+              }
+
+            
+            function update_linear(source) {
               var duration = d3.event && d3.event.altKey ? 5000 : 500;
             
               // Compute the new tree layout.
@@ -204,7 +363,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             
               nodeUpdate.select("circle")
                   //.attr("r", function(d){return 2.5 + 6*calculateNumberOfDescendants(d)/nodes.length ;})
-                  .attr("r", function(d){return 4.5;})
+                  .attr("r", 4.5)
                   .style("fill", function(d) { return d._children ? "#00C2FF" : "#fff"; });
             
               nodeUpdate.select("text")
@@ -256,9 +415,13 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 d.x0 = d.x;
                 d.y0 = d.y;
               });
-}
+            }
 
 
+            
+            
+            //on démarre l'initialisation du graph
+            init_tree();
     </script>
         
     </body>
