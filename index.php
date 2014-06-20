@@ -282,7 +282,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                         if (d.x<180)
                             return "translate( "+Math.abs(d.x-90)/9+", 0)rotate("+((90-d.x)/1.2)+")translate(-5)";
                         else{
-                            return "translate( "+Math.abs(d.x-270)/9+", 0)rotate("+(180+(270-d.x)/1.2)+")translate(-" + (d.name.length + 60)  + ")";
+                            return "translate( "+Math.abs(d.x-270)/9+", 0)rotate("+(180+(270-d.x)/1.2)+")translate(-" + (d.name.length*6 + 20)  + ")";
                         }
                         
                     });
