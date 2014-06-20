@@ -36,11 +36,11 @@ function startPlayerSearch(root, name) {
     element = root;
     
     if (element.children) {
-        for(child of element.children){
-            var current_name = child.name;
+        for(var i=0; i<element.children.length; i++){
+            var child = element.children[i];
             if (!found_sps) {
                 //on vérifie le noeud courant
-                if (name.toUpperCase() == current_name.toUpperCase()) {
+                if (name.toUpperCase() == child.name.toUpperCase()) {
                     found_sps = true;
                     hide(child);
                 }
@@ -61,10 +61,10 @@ function hideIfDoesnotHaveChildrenNamed(element, name){
     var found = false;
 
     if (element.children) {
-        for(child of element.children){
-            var current_name = child.name;
+        for(var i=0; i<element.children.length; i++){
+            var child = element.children[i];
 
-            if (name.toUpperCase() == current_name.toUpperCase()) {
+            if (name.toUpperCase() == child.name.toUpperCase()) {
                 //on cache la lignée
                 hideAll(child);
                 
@@ -74,9 +74,9 @@ function hideIfDoesnotHaveChildrenNamed(element, name){
         }
         
         //si on arrive ici, on a pas trouvé parmi les fils direct on relance
-        for(child of element.children){
+        for(var i=0; i<element.children.length; i++){
+            var child = element.children[i];
             if (found == false) {
-                //code
                 found = hideIfDoesnotHaveChildrenNamed(child, name) || found;
             }
             else{
@@ -97,13 +97,15 @@ function hideIfDoesnotHaveChildrenNamed(element, name){
 function calculateNumberOfDescendants(d){
     var number =0;
     if (d.children) {
-        for(child of d.children){
+        for(var i=0; i<element.children.length; i++){
+            var child = element.children[i];
             number+= calculateNumberOfDirectChildren(child);
         }
     }
     
     if (d._children) {
-        for(child of d._children){
+        for(var i=0; i<element.children.length; i++){
+            var child = element.children[i];
             number += calculateNumberOfDirectChildren(child);
         }
     }
