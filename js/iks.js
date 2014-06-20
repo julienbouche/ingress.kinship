@@ -28,6 +28,7 @@ function openPathToPlayer(name){
     if (!found) {
         alert("le  joueur "+name+" n'a pas ete trouve.")
     }
+
 }
 
 function startPlayerSearch(root, name) {
@@ -37,20 +38,19 @@ function startPlayerSearch(root, name) {
     if (element.children) {
         for(child of element.children){
             var current_name = child.name;
-
-            if (name.toUpperCase() == current_name.toUpperCase()) {
-                return true;
-            }
-        }
-
-        //si on arrive ici, on a pas trouvé parmi les fils direct on relance
-        for(child of element.children){
-            if (found_sps) {
-                hideAll(child);
+            if (!found_sps) {
+                //on vérifie le noeud courant
+                if (name.toUpperCase() == current_name.toUpperCase()) {
+                    found_sps = true;
+                    hide(child);
+                }
+                else{
+                    found_sps = hideIfDoesnotHaveChildrenNamed(child, name) || found_sps;
+                }
             }
             else{
-                found_sps = hideIfDoesnotHaveChildrenNamed(child, name) || found_sps;
-            }
+                hideAll(child);
+            }   
         }
     }
     
