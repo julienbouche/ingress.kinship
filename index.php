@@ -148,8 +148,14 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             
             function update_mode(elt){
                 graph_mode = elt.value;
+                
+                //on vire tout ce qu'on a pu ajouter jusque là
                 d3.select("body").select("svg").remove();
+                
+                //et on reinitialise tout
                 init_tree();
+                
+                //mise à jour de l'affichage
                 update(root);
             }
                 
@@ -176,9 +182,10 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 vis = d3.select("body").append("svg:svg")
                     .attr("width", w + m[1] + m[3])
                     .attr("height", h + m[0] + m[2])
+                    .call(zoom)
                     .append("svg:g")
-                    .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
-                    .call(zoom);
+                    .attr("fill", "none")
+                    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
                 
                 
                 //ajout pour trapper les évènements correctement
@@ -206,15 +213,16 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 diagonal = d3.svg.diagonal.radial()
                     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
                 
-                svg = d3.select("body").append("svg")
+                vis = d3.select("body").append("svg:svg")
                     .attr("width", diameter)
-                    .attr("height", diameter - 150)
-                  .append("g")
-                    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")")
-                    .call(zoom);
+                    .attr("height", diameter)
+                    .call(zoom)
+                    .append("svg:g")
+                    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+                    
                 
                 //ajout pour trapper les évènements correctement
-                var rect = svg.append("rect")
+                var rect = vis.append("rect")
                     .attr("width", w)
                     .attr("height", h)
                     .style("fill", "none")
@@ -230,7 +238,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             
             //fonction permettant de mettre à jour l'affichage de l'arbre
             function update(source){
-                //TODO switch between update modes
+                //switch between update modes
                 if (graph_mode=='linear') {
                     update_linear(source);
                 }
@@ -246,7 +254,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 nodes.forEach(function(d) { d.y = d.depth * 80; });
               
                 // Update the nodes…
-                var node = svg.selectAll("g.node")
+                var node = vis.selectAll("g.node")
                     .data(nodes, function(d) { return d.id || (d.id = ++i); });
               
                 // Enter any new nodes at the parent's previous position.
@@ -280,7 +288,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     .style("fill-opacity", 1)
                     .attr("transform", function(d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (d.name.length + 50)  + ")"; });
               
-                // TODO: appropriate transform
+                //transform
                 var nodeExit = node.exit().transition()
                     .duration(duration)
                     //.attr("transform", function(d) { return "diagonal(" + source.y + "," + source.x + ")"; })
@@ -293,7 +301,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     .style("fill-opacity", 1e-6);
               
                 // Update the links…
-                var link = svg.selectAll("path.link")
+                var link = vis.selectAll("path.link")
                     .data(links, function(d) { return d.target.id; });
               
                 // Enter any new links at the parent's previous position.
@@ -327,8 +335,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
 
             
             function update_linear(source) {
-              var duration = d3.event && d3.event.altKey ? 5000 : 500;
-            
+              
               // Compute the new tree layout.
               var nodes = tree.nodes(root).reverse();
             
