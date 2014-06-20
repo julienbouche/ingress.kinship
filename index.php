@@ -107,7 +107,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
     </head>
     <body>
         <div class="header">
-            <span style="display: inline-block;margin:auto;text-align: center;width:100%">Ingress Master-Padawan Relationship</span>
+            <span>Ingress Master-Padawan Relationship</span>
             <div>
                 <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" style="float:left;width:40%">
                     <fieldset>
@@ -446,6 +446,6 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
             //on démarre l'initialisation du graph
             init_tree();
     </script>
-    
+    <div class="footer">Ce site n'est pas affilié à Niantic Labs ou Google.</div>
     </body>
 </html>
