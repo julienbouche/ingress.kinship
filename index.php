@@ -134,7 +134,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                         Mode:
                         <select name="graphmode" id="graphmode" onchange="update_mode(this);">
                             <option value="linear">Lineaire</option>
-                            <option value="radial">Radial</option>
+                            <option value="radial" selected>Radial</option>
                         </select>
                         
                     </fieldset>            
