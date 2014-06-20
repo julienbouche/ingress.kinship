@@ -15,8 +15,14 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
     
     if($parent[0]=="@"){
         $parent = substr($parent, 1);
+        
+        
     }
-    
+    //traite le cas des utilisateurs essayant de s'ajouter à la racine: sans cela on crée un utilisateur '?'.
+    //cet utilisateur n'existe pas dans le système. Il ne sert à rien.
+    if($parent=="?"){
+        $parent = "";
+    }
     
     if(strlen($username)){
         //on vérifie que l'utilisateur n'est pas encore présent
