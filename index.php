@@ -126,7 +126,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
         <script>
             //variables globales
             var m = [20, 20, 20, 20],
-                w = maximum(window.innerWidth - m[1] - m[3], 1000),
+                w = Math.max(window.innerWidth - m[1] - m[3], 1000),
                 h = window.innerHeight - m[0] - m[2],
                 i = 0,
                 duration = 350,
@@ -134,12 +134,6 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 mult_x=1.5, mult_y=1,
                 root, tree, vis, diagonal, svg, zoom,
                 graph_mode;
-                
-                
-                
-            function maximum(a, b) {
-                return a<b? b: a;
-            }
             
             
             function zoomed() {
