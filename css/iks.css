@@ -23,11 +23,11 @@ body{
         
         .link {
           fill: none;
-          stroke: #00C2FF;
+          stroke: #555;
           stroke-width: 1.5px;
         }
         path.link {
             fill: none;
-            stroke: #ccc;
+            stroke: #555;
             stroke-width: 1.5px;
         }
