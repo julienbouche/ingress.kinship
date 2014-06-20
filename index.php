@@ -24,6 +24,12 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
         $parent = "";
     }
     
+    //traite le cas d'un auto master-padawan. Sans cela l'utilisateur n'est plus visible dans le graphe
+    //(le generateur du json ne sait pas comment traiter le cas)
+    if(strtoupper($parent)==strtoupper($username)){
+        $parent = "";
+    }
+    
     if(strlen($username)){
         //on vérifie que l'utilisateur n'est pas encore présent
         $sql = "SELECT * FROM USER WHERE UCASE(name)=UCASE('$username')";
