@@ -130,7 +130,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 h = window.innerHeight - m[0] - m[2],
                 i = 0,
                 duration = 350,
-                diameter = Math.min(w,h),
+                diameter = Math.max(w,h),
                 mult_x=1.5, mult_y=1,
                 root, tree, vis, diagonal, svg, zoom,
                 graph_mode;
