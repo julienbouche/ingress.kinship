@@ -230,7 +230,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     .attr("height", diameter)
                     .call(zoom)
                     .append("svg:g")
-                    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+                    .attr("transform", "translate(" + diameter / 2 + "," + 500/ 2 + ")");
                     
                 
                 //ajout pour trapper les évènements correctement
