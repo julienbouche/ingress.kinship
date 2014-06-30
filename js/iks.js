@@ -93,20 +93,32 @@ function hideIfDoesnotHaveChildrenNamed(element, name){
     
     return found;
 }
+function calculateNumberOfVisibleDescendants(d){
+    var number =0;
+    if (d.children) {
+        for(var i=0; i<d.children.length; i++){
+            var child = d.children[i];
+            number+= calculateNumberOfVisibleDescendants(child);
+        }
+    }
+    
+    number+= calculateNumberOfDirectVisibleChildren(d);
+    return number;
+}
 
 function calculateNumberOfDescendants(d){
     var number =0;
     if (d.children) {
         for(var i=0; i<d.children.length; i++){
             var child = d.children[i];
-            number+= calculateNumberOfDirectChildren(child);
+            number+= calculateNumberOfDescendants(child);
         }
     }
     
     if (d._children) {
-        for(var i=0; i<d.children.length; i++){
-            var child = d.children[i];
-            number += calculateNumberOfDirectChildren(child);
+        for(var i=0; i<d._children.length; i++){
+            var child = d._children[i];
+            number += calculateNumberOfDescendants(child);
         }
     }
     
@@ -125,4 +137,114 @@ function calculateNumberOfDirectChildren(d) {
     }
     
     return 0;
+}
+
+function calculateNumberOfDirectVisibleChildren(d) {
+    
+    if (d.children) {
+        return d.children.length;
+    }
+    
+    return 0;
+}
+
+
+
+            
+function display_stats() {
+    menu = document.getElementById("statsSideMenu");
+    if (menu) {
+        if (!menu.className.match(/(?:^|\s)visible(?!\S)/)) {
+            menu.className="sidemenu right visible";
+        }
+        else menu.className="sidemenu right";
+    }
+}
+
+function calc_stats(element) {
+    //rafraichir la valeur de la profondeur maximale de l'arbre en fonction de ce qui est affiché
+    calc_stats_profmax(element);
+    
+    calc_stats_largmax(element);
+    
+    //compte le nb de joueur affichés
+    calc_nb_displayed_player(element);
+}
+
+function calc_nb_displayed_player(element) {
+    var max=0, max_v = 0;
+    
+    
+    max = calculateNumberOfDescendants(element);
+    max_v = calculateNumberOfVisibleDescendants(element);
+    //alert(element.name +" : "+max_v+"/"+max);
+    dom_stat_player = document.getElementById("stats_visible_player");
+    
+    if (dom_stat_player) {
+        dom_stat_player.innerHTML = max_v+ " / "+ max;
+    }
+}
+
+function calc_stats_profmax(element){
+    var max = 0;
+    max = calc_stats_profmax_r(element);
+    dom_stat_profmax = document.getElementById("stats_profmax");
+    if (dom_stat_profmax) {
+        dom_stat_profmax.innerHTML = max-1;
+    }
+}
+
+function calc_stats_profmax_r(element) {
+    var max = 0;
+    var tmp = 0;
+    
+    if (element.children) {
+        for(var i=0; i<element.children.length; i++){
+            tmp = calc_stats_profmax_r(element.children[i]);
+            if (tmp>max) {
+                max = tmp;
+            }
+        }
+    }
+    
+    //on retourne le nombre max + 1 pour le noeud courant
+    max+=1;
+    
+    return max;
+}
+
+function calc_stats_largmax(element){
+    var max = 0;
+    //la fratrie du noeud racine ne compte pas vraiment...
+    
+    if (element.children) {
+        for(var i=0; i<element.children.length;i++){
+            max = Math.max(max, calc_stats_largmax_r(element.children[i]));
+        }
+    }
+    
+    //max = calc_stats_largmax_r(element);
+    dom_stat_largmax = document.getElementById("stats_largmax");
+    if (dom_stat_largmax) {
+        if (max>1){
+            dom_stat_largmax.innerHTML = max;
+        }
+        else
+            dom_stat_largmax.innerHTML = "aucune fratrie";
+    }
+}
+
+function calc_stats_largmax_r(element){
+    if (element.children) {
+        var max = 0;
+        //la fratrie du noeud racine ne compte pas vraiment...
+        
+        if (element.children) {
+            for(var i=0; i<element.children.length;i++){
+                max = Math.max(max, calc_stats_largmax_r(element.children[i]));
+            }
+        }
+        return Math.max(max, element.children.length);
+    }
+    else return 0;
 }

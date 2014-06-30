@@ -456,107 +456,11 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 //recalcul des stats
                 calc_stats(root);
             }
-
-
             
             
             //on démarre l'initialisation du graph
             init_tree();
             
-            
-            function display_stats() {
-                menu = document.getElementById("statsSideMenu");
-                if (menu) {
-                    if (!menu.className.match(/(?:^|\s)visible(?!\S)/)) {
-                        menu.className="sidemenu right visible";
-                    }
-                    else menu.className="sidemenu right";
-                }
-            }
-            function calc_stats(element) {
-                //rafraichir la valeur de la profondeur maximale de l'arbre en fonction de ce qui est affiché
-                calc_stats_profmax(element);
-                
-                calc_stats_largmax(element);
-                
-                //compte le nb de joueur affichés
-                calc_nb_displayed_player(element);
-            }
-            
-            function calc_nb_displayed_player(element) {
-                var max=0;
-                
-                max = calculateNumberOfDescendants(element);
-                
-                dom_stat_player = document.getElementById("stats_visible_player");
-                
-                if (dom_stat_player) {
-                    dom_stat_player.innerHTML = max;
-                }
-            }
-            function calc_stats_profmax(element){
-                var max = 0;
-                max = calc_stats_profmax_r(element);
-                dom_stat_profmax = document.getElementById("stats_profmax");
-                if (dom_stat_profmax) {
-                    dom_stat_profmax.innerHTML = max-1;
-                }
-            }
-            
-            function calc_stats_profmax_r(element) {
-                var max = 0;
-                var tmp = 0;
-                
-                if (element.children) {
-                    for(var i=0; i<element.children.length; i++){
-                        tmp = calc_stats_profmax_r(element.children[i]);
-                        if (tmp>max) {
-                            max = tmp;
-                        }
-                    }
-                }
-                
-                //on retourne le nombre max + 1 pour le noeud courant
-                max+=1;
-                
-                return max;
-            }
-            
-            function calc_stats_largmax(element){
-                var max = 0;
-                //la fratrie du noeud racine ne compte pas vraiment...
-                
-                if (element.children) {
-                    for(var i=0; i<element.children.length;i++){
-                        max = Math.max(max, calc_stats_largmax_r(element.children[i]));
-                    }
-                }
-                
-                //max = calc_stats_largmax_r(element);
-                dom_stat_largmax = document.getElementById("stats_largmax");
-                if (dom_stat_largmax) {
-                    if (max>1){
-                        dom_stat_largmax.innerHTML = max;
-                    }
-                    else
-                        dom_stat_largmax.innerHTML = "aucune fratrie";
-                }
-            }
-            
-            function calc_stats_largmax_r(element){
-                if (element.children) {
-                    var max = 0;
-                    //la fratrie du noeud racine ne compte pas vraiment...
-                    
-                    if (element.children) {
-                        for(var i=0; i<element.children.length;i++){
-                            max = Math.max(max, calc_stats_largmax_r(element.children[i]));
-                        }
-                    }
-                    return Math.max(max, element.children.length);
-                }
-                else return 0;
-            }
             
     </script>
     <div class="github-fork-ribbon-wrapper right-bottom">
