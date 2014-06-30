@@ -1,0 +1,110 @@
+/*
+ *
+ *
+ */
+
+a{
+    text-decoration: none;
+    color:black;
+}
+
+/* SIDE MENU GENERAL SETTINGS*/
+
+.sideMenu{
+    position:fixed;
+    top:100px;
+    /*background-color:white;
+    opacity: 0.5;*/
+    border-left: 1px solid #00C2FF;
+    /*border-top: 1px solid #00C2FF;*/
+    
+    /*height:80%;*/
+    overflow:hidden;
+    padding:10px;
+    z-index: 100;
+    
+    /* animating fade-in fade-out effect*/
+    width:0px;
+    transition:width 0.3s ease; 
+    
+    
+    /* styling */
+    box-shadow: 0 0 3px #00C2FF;
+    background-image:url('../side_menu_icon.png');
+    background-repeat:no-repeat;
+    background-origin: border-box;
+    font-size: x-small;
+}
+        /*animating effect */
+.visible ul{
+    visibility: visible;
+}
+
+.visible{
+    width:200px;
+}
+
+ul{
+    /*styling lists*/
+    list-style: none;
+    padding:0px;
+    
+    /* improving animation effect */
+    visibility: hidden;
+}
+
+.sideMenu ul li{
+    padding:5px;
+    border-radius: 5px;
+    margin:2px;
+    /*background-color:#eee;
+     
+    border: 1px solid #00C2FF;*/
+}
+/*.sideMenu ul li:hover{
+    background-color:#E6FFCC;
+}*/
+
+
+
+
+/*SIDE MENU LEFT/RIGHT SPECIFIC SETTINGS */
+.left{
+    /*positioning*/
+    left:0px;
+    background-position: right;
+    
+    /* styling */
+    border-radius:0px 5px 5px 0px;
+}
+
+.right{
+    right:0px;
+    border-radius:5px 0px 0px 5px;
+    background-position:left; 
+}
+
+
+/* CONTENT ELEMENT SETTINGS */
+.content{
+    position:absolute;
+    border:1px thin black;
+    margin-top:25px;
+    left:30px;
+    right:30px;
+    background-color:white;
+    
+    /* animating resize */
+    transition: all 0.3s ease;
+}
+
+/* AVOID SIDE MENU HOVERING CONTENTS VIEW */
+.left:hover ~ .content{
+    left:230px;
+}
+
+.right:hover ~ .content{
+    right: 230px;
+}
+
+

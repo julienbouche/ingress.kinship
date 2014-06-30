@@ -97,15 +97,15 @@ function hideIfDoesnotHaveChildrenNamed(element, name){
 function calculateNumberOfDescendants(d){
     var number =0;
     if (d.children) {
-        for(var i=0; i<element.children.length; i++){
-            var child = element.children[i];
+        for(var i=0; i<d.children.length; i++){
+            var child = d.children[i];
             number+= calculateNumberOfDirectChildren(child);
         }
     }
     
     if (d._children) {
-        for(var i=0; i<element.children.length; i++){
-            var child = element.children[i];
+        for(var i=0; i<d.children.length; i++){
+            var child = d.children[i];
             number += calculateNumberOfDirectChildren(child);
         }
     }
