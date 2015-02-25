@@ -274,7 +274,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     links = tree.links(nodes);
               
                 // Normalize for fixed-depth.
-                nodes.forEach(function(d) { d.y = d.depth * 80; });
+                nodes.forEach(function(d) { d.y = d.depth * 150; });
               
                 // Update the nodes…
                 var node = vis.selectAll("g.node")
