@@ -26,10 +26,10 @@
     }
 
 <?php
-        if($cpt < $nb_player){
-            echo ",";
-        }
-        $cpt++;
+            if($cpt < $nb_player){
+                echo ",";
+            }
+            $cpt++;
         }
     }
 ?>
@@ -46,26 +46,25 @@
             
             ?>
         ,"children" : [
-            <?
+<?php
             while($row = mysql_fetch_assoc($result)){
                 
-    ?>
+?>
         {
             "name": "@<?=$row['name']?>",
             "size": ""
             <?php getChildren($row['id_user']); ?>
         }
     
-    <?php
-            if($cpt < $nb_player){
-                echo ",";
+<?php
+                if($cpt < $nb_player){
+                    echo ",";
+                }
+                $cpt++;
             }
-            $cpt++;
-            }
-            ?>
+?>
         ]
-            <?php
-            
+<?php
         }
     }
 ?>
