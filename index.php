@@ -263,9 +263,6 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     update_linear(source);
                 }
                 else update_radial(source);
-                
-                //recalcul des stats
-                calc_stats(root);
             }
             
             function update_radial(source) {
@@ -354,6 +351,9 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                   d.x0 = d.x;
                   d.y0 = d.y;
                 });
+                
+                //recalcul des stats
+                calc_stats(root);
               }
 
             
@@ -446,6 +446,9 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                 d.x0 = d.x;
                 d.y0 = d.y;
               });
+              
+                //recalcul des stats
+                calc_stats(root);
             }
             
             
