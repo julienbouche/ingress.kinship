@@ -238,7 +238,7 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
                     .attr("height", diameter)
                     .call(zoom)
                     .append("svg:g")
-                    .attr("transform", "translate(" + diameter / 2 + "," + 500/ 2 + ")");
+                    .attr("transform", "translate(" + diameter / 2 + "," + h/ 2 + ")");
                     
                 
                 //ajout pour trapper les évènements correctement
@@ -304,13 +304,9 @@ if(isset($_POST['username']) && isset($_POST['parentusername'])){
               
                 nodeUpdate.select("text")
                     .style("fill-opacity", 1)
+                    .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
                     .attr("transform", function(d) {
-                        if (d.x<180)
-                            return "translate( "+Math.abs(d.x-90)/9+", 0)rotate("+((90-d.x)/1.2)+")translate(-5)";
-                        else{
-                            return "translate( "+Math.abs(d.x-270)/9+", 0)rotate("+(180+(270-d.x)/1.2)+")translate(-" + (d.name.length*6 + 20)  + ")";
-                        }
-                        
+                        return d.x < 180 ? "" : "rotate(180)translate(-" + (Math.max(d.name.length,15))  + ")";
                     });
               
                 //transform
